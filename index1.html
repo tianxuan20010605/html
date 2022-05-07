@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登录页面</title>
+</head>
+<link rel="stylesheet" type="text/css" href="index.css"/>
+<script src="jquery.js" type="text/javascript"></script>
+	<script>
+		$(document).ready(function(){
+			var arrname=new Array();
+			arrname[0]="111111";
+			arrname[1]="fa5454";
+			arrname[2]="fa4545";
+			var arrpass=new Array();
+			arrpass[0]="111111";
+			arrpass[1]="fa5454";
+			arrpass[2]="fa4545";
+			$(".tfocus").bind('input propertychange',function(){
+				var	value1=$(this).val();
+				var valen=value1.length;
+				if(valen<6)
+				{
+					$(this).next().css({"display":"block"});
+				}
+				else
+				{
+					$(this).next().css({"display":"none"});
+				}
+			});
+			$(".btn").click(function(){
+				var	name1=$("#name").val();
+				var	pass1=$("#pass").val();
+				var arenamelen=arrname.length;
+				for(i=0;i<arenamelen;i++)
+				{
+					if(name1==arrname[i]&&pass1==arrpass[i])
+					{
+						$(".kon").css({"display":"none"});
+						$(".loadig").css({"display":"block"});
+						setTimeout(function (){
+							$(location).attr('href','mian.html');
+						},2000);
+					}
+				}
+			});
+			$.getScript("http://php.weather.sina.com.cn/js.php?" + $.param({
+    city :  "北京", //城市
+    day : 0,
+    password : "DJOYnieT8234jlsK"
+}) , function(json){
+    alert('地址：' + city + '\n天气：' + status1 + '\n温度' + temperature1 + '°');
+});
+				
+		});
+	</script>
+<body>
+	<div class="kon">
+		<div id="a"></div>
+		<form class="form1" >
+			<h1>LOGIN</h1>
+			<div class="zhy">
+				<input id="name" class="tfocus" type="text" placeholder="Username" >
+				<div id="error" class="error_tx"><img src="img/error.svg" width="20px"></div>
+				<input id="pass" class="tfocus" type="password" placeholder="Password">
+				<div id="error1" class="error_tx"><img src="img/error.svg" width="20px"></div>
+				<input type="button" value="Login" class="btn">
+			</div>
+		</form>
+	</div>
+	<div class="loadig" style="display: none">
+		<span>Loadig....</a></span>
+	</div>
+</body>
+</html>

@@ -1,0 +1,208 @@
+
+body
+{
+	background:url("img/background1.jpg");
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+body h1
+{
+	color: #FFFFFF;
+	text-align: center;
+	position: relative;
+	top: -35px
+}
+.form1
+{
+	
+	width: 300px;
+	height: 300px;
+	padding: 40px;
+	margin: 0 auto;
+	position: absolute;
+	top:50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	/*background:#333333 ;	*/
+	color: #FFFFFF;
+}
+.zhy
+{
+	position:absolute;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	align-items:center;
+	line-height:50px;
+}
+.zhy
+{
+	width: 300px;
+}
+.tfocus
+{
+	background: #333333;
+	height: 40px;
+	margin-top: 20px;
+	text-align: center;
+	border-radius: 50px 50px 50px 50px;
+	border: #0091FF solid  2px;
+	color: aliceblue;
+	width: 220px;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	
+
+} 
+.tfocus:focus
+{
+	border: solid 2px #63BE34;
+	width: 280px;
+}
+.btn
+{
+	background: #333333;
+	height: 40px;
+	text-align: center;
+	border-radius: 50px 50px 50px 50px;
+	border: solid 2px #63BE34;
+	color: aliceblue;
+	position: relative;
+	left: 50%;
+	top:30px;
+	height: 50px;
+	width: 100px;
+	transform:translate(-50%,-50%);
+}
+.btn:hover
+{
+	background: #63BE34;
+}
+#a
+{
+	
+	width:300px;
+	height:300px;
+	padding: 40px;
+	margin: 0 auto;
+	position: absolute;
+	top:50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	/*background-image: linear-gradient(#333333,#F9F9F9);*/
+	/*filter: blur(-1px);*/
+	background: #C4C4C4;
+	border-radius: 50px 50px 50px 50px;
+	border: #222222 1px solid;
+	overflow: hidden;
+	opacity: 0.2;
+}
+#error
+{
+	display: none;
+	position:absolute;
+	top: 0%;
+	right: 17px;
+	z-index: 999;
+}
+.error_tx:hover::before
+{
+	content: "不符合规则";
+	font-size: 13px;
+	position: absolute;
+	top: -3px;
+	left: 30px;
+	width: 100px;
+	color: #FF0004;
+}
+#error1
+{
+	display: none;
+	width: 20px;
+	position:absolute;
+	top: 35%;
+	right: 17px;
+	z-index: 999;
+}
+/*登录动画部分*/
+
+.loadig 
+{
+	
+	margin: 0 auto;
+	margin-top: 10%;
+	font-size: 18px;
+	width: 200px;
+	height: 200px;
+	line-height: 200px;
+	box-sizing: border-box;
+	border-radius: 50%;
+	border-top: 10px solid #e74c3c;
+	animation: a1 2s linear infinite;
+	transform: rotate(0deg);
+	
+}
+.loadig::before,.loadig::after
+{
+	content:'';
+	width: 200px;
+	height: 200px;
+	position: absolute;
+	left: 0;
+	top: -10px;
+	box-sizing: border-box;
+	border-radius: 50%;
+	
+
+}
+.loadig::before
+{
+	border-top: 10px solid #e67e22;
+	transform: rotate(120deg);
+}
+.loadig::after
+{
+	border-top: 10px solid #3498db;
+	transform: rotate(240deg);
+	
+}
+.loadig span
+{
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	text-align: center;
+	line-height: 200px;
+	animation: a2 2s linear infinite;
+
+}
+@keyframes a1
+{
+	to
+	{
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes a2
+{
+	to
+	{
+		transform: rotate(-360deg);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

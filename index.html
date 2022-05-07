@@ -1,0 +1,400 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="dist/assets/bootstrap.min.css">
+<link rel="stylesheet" href="dist/assets/docs.css">
+<script src="dist/assets/jquery.js"></script>
+<script src="dist/assets/bootstrap.min.js"></script>
+<title>cheshi</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<link rel="stylesheet" type="text/css" href="mian.css">
+	<script type="text/javascript">
+		 function getCurDate()  
+    {  
+     var d = new Date();  
+     var week;  
+     switch (d.getDay()){  
+     case 1: week="星期一"; break;  
+     case 2: week="星期二"; break;  
+     case 3: week="星期三"; break;  
+     case 4: week="星期四"; break;  
+     case 5: week="星期五"; break;  
+     case 6: week="星期六"; break;  
+     default: week="星期天";  
+     }  
+     var years = d.getFullYear();  
+     var month = add_zero(d.getMonth()+1);  
+     var days = add_zero(d.getDate());  
+     var hours = add_zero(d.getHours());  
+     var minutes = add_zero(d.getMinutes());  
+     var seconds=add_zero(d.getSeconds());  
+     var ndate = hours+":"+minutes+":"+seconds+" "+week;  
+     divT.innerHTML= ndate;  
+    }  
+      
+    function add_zero(temp)  
+    {  
+     if(temp<10) return "0"+temp;  
+     else return temp;  
+    }  
+      
+    setInterval("getCurDate()",100);  
+		
+		
+		
+			/*搜索联想词部分*/
+		var tp=0;
+		var juli=-10;
+	 	function my_Spinner(){
+				$(".Lenovo").empty();
+	 			var value=$(".text").val();
+	 			var oScript=document.createElement("script");
+	 			oScript.src="http://suggestion.baidu.com/su?ie=utf-action=json&wd="+value+"&cb=aa";
+	 			document.body.appendChild(oScript);
+				$(".Lenovo").hide();
+				setTimeout(function () { 
+					$height=$(".box").offset().top+($(".Lenovo").height()/2)+juli;
+					$(".Lenovo").css({
+						"top":$height
+					}).show();
+					tp=0;
+				}, 600);	
+	 	}
+		function aa(data)
+		 {
+			if(tp==1)
+			{
+				return false;
+			}
+			 else
+			 {
+				for(var js=0;js<=10;js++)
+				{
+					 console.log(data.s[js]); 
+					if(data.s[js]==undefined)
+					{
+						break;
+					}
+					else{ 
+							//$(".Lenovo").clone(true).append("<p>"+data.s[js]+"</p>");
+				$("<a href='https://www.baidu.com/baidu?tn=monline_3_dg&ie=utf-8&wd="+data.s[js]+"'>"+data.s[js]+"</a>").clone(true).appendTo(".Lenovo");
+						}
+					
+				}
+				 tp=1;
+			 }
+			
+			
+			 /*$.each(data.s,function(i,val){
+			
+				 if(js>=10)
+				 {
+					return false;
+				 }
+				 else
+				 {
+					 console.log(val); 
+				 	$(".Lenovo").append("<p>"+val+"</p>");
+				 }
+				 js++;
+			 });*/
+		 }
+		
+		/*联想词定位部分*/
+		$(window).resize(function(){
+				$height=$(".box").offset().top+($(".Lenovo").height()/2)+juli;
+				$(".Lenovo").css({
+					"top":$height
+				});
+		})
+		
+		
+
+
+		
+		
+		$(document).ready(function (){
+			/*拖拽部分*/
+			var $wb;
+			var temp=0;
+			$(".wea").mousedown(function(){
+				temp=1;
+				$wb=$(this);
+			  });
+			$(document).mousemove(function(e){
+				if(temp==1)
+				{
+					$($wb).offset({top:e.pageY-25,left:e.pageX-25});
+				}
+			});
+			$(document).mouseup(function(e){
+				temp=0;
+			});
+			
+			
+			/*设置页面高度*/
+			$("body").height($(window).height());
+			/*天气部分*/
+			var arr=new Array();
+			var ipaddress=returnCitySN["cip"];		//获取ip
+			$.ajax({
+				url:"//ip.help.bj.cn/?ip="+ipaddress,
+				dataType:"JSON",
+				type:"get",
+				async:"false",
+				data:"UrlParam",
+				success:function(val)
+				{
+					arr.push(val.data[0].province);		//省，市，温度，天气，风向，风速，更新日期
+					
+					
+					arr.push(val.data[0].city);
+				
+					
+					arr.push(val.data[0].district);
+				
+					
+					arr.push(val.data[0].weather.temp);
+				
+					
+					arr.push(val.data[0].weather.weather);
+				
+					
+					arr.push(val.data[0].weather.WD);
+					
+					
+					arr.push(val.data[0].weather.WS);
+					
+					
+					arr.push(val.data[0].weather.update);
+					a();				//写入数据完成之后运行，不能同时运行,会无法获取值
+				},
+				error:function()
+				{
+					alert("error：此错误是因为未从DW端打开，或者未服务器上打开，在直接单击进入有可能无法从接口获取数据所以报错");
+				}
+			});
+	
+			function a()
+			{
+				$.each(arr,function(i,val){
+					$(".weather").html($(".weather").html()+val);
+		
+					$(".wea:eq("+i+") p").text(val);
+					
+				});
+		
+			}
+			
+
+			
+			/*获取本地时间(未使用)*/
+			function get_Data()
+			{
+				var myDate=new Date();
+				var hours=myDate.getHours();
+		  		var minutes=myDate.getMinutes();
+				var Seconds=myDate.getSeconds();
+				$(".wea:eq(9)").text(hours+":"+minutes+":"+Seconds);
+			}
+
+			/*显示方块*/
+			$(".wea").hide();		//设置初始状态
+			var zhi=0;			//0 为收起 1为放下
+			$(".wea:eq(2)").hide();
+			$(".ss ul li").click(function()
+			{
+				var b=parseInt($(this).val());
+				if(b=="9")
+				{
+					if(zhi==0)
+					{
+						$(".wea").show();
+						zhi=1;
+					}
+					else
+						{
+							$(".wea").hide();
+							zhi=0;
+						}
+				}
+				else if(b=="10")
+				 {
+				
+					$(".foot").append("<div class='wea'><p>天气</p><span class='glyphicon glyphicon glyphicon-remove guanbi'></span><textarea class='text'>此处为文本区域</textarea></div>");
+					 $(".foot").delegate(".wea","mousedown",function(){
+							temp=1;
+							$wb=$(this);
+					 });
+					 $(".foot").delegate(".guanbi","click",function(){
+							$(this).parent().remove();
+					 });
+				 }
+				else
+				{
+					$(".wea:eq("+b+")").toggle();
+				}
+				/*$(".dropdown > a").css({"background":"none"});*/
+			})
+			
+			/*删除文本框*/
+			$(".guanbi").click(function(){
+				$(this).parent().remove();
+			});
+			
+			
+			/*页面页面限制部分*/
+			
+			
+			/*搜索栏部分*/
+			$(".shousuo").mousedown(function(){
+				$("#sou").css
+				({
+					"background":"#95a5a6"
+				});
+			});
+			$(".shousuo").on("mouseup",function(){
+				$("#sou").css
+				({
+					"background":"#FFFFFF"
+				});
+				huiche();
+			});
+			$(".box").mouseout(function(){
+				$("#sou").css
+				({
+					"background":"#353b48"
+				});
+				//$(".Lenovo").empty();
+			});
+			$(".box").mouseover(function(){
+				$("#sou").css
+				({
+					"background":"#FFFFFF"
+				});
+			});
+			
+			
+			$(window).click(function(){
+				$(".Lenovo").empty();
+			});
+			
+			
+			/*页面跳转部分*/
+			function huiche()		//跳转事件
+			{
+				var mess=$(".text").val();
+				if(mess=="")
+				{
+					return;
+				}
+				window.location.href='https://www.baidu.com/baidu?tn=monline_3_dg&ie=utf-8&wd='+mess;
+				
+			}
+			$(document).keydown(function(event)  //回车事件
+			{
+				if(event.keyCode==13)
+				{
+					huiche();	
+				}
+			})
+			
+			/*联想词跳转部分*/
+			$(".Lenovo p").on("click",function(){
+					alert("fasdf");
+				 // window.location.href='https://www.baidu.com/baidu?tn=monline_3_dg&ie=utf-8&wd='+$(this).text();
+			});
+			
+			/*导航栏事件*/
+			$(".bian a").css({"color":"antiquewhite"});
+			$(".dropdown > a").css({"color":"antiquewhite"});
+			$(".bian").hover(function(){
+				$(this).children("a").css({"color":"aliceblue"});
+			},function(){
+				$(this).children("a").css({"color":"antiquewhite"});
+			});
+			
+			$(".dropdown").hover(function(){
+				$(".dropdown > a").css({"color":"aliceblue"});
+			},function(){
+				$(".dropdown > a").css({"color":"antiquewhite"});
+			});
+			
+		
+			
+			
+		});
+	</script>
+</head>
+
+<body >
+	
+	<header>
+	<nav class="navbar navbar-default bg" role="navigation">
+	  <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+		  <span class="sr-only">Toggle navigation</span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#" style="color: antiquewhite">TIANXUAN</a>
+	  </div>
+
+
+	  <div class="collapse navbar-collapse navbar-ex1-collapse bg">
+		<ul class="nav navbar-nav">
+		  <li class="bian"><a href="#" style="">首页</a></li>
+		  <li class="bian"><a href="#" style="">产品鉴赏</a></li>
+		  <li class="bian"><a href="#" style="">最新资讯</a></li>
+		  <li class="bian"><a href="#" style="">最新资讯</a></li>
+
+		  <li class="dropdown ss">
+			<a href="#" id="cai"  class="dropdown-toggle" data-toggle="dropdown">添加天气方块 <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  <li value="0"><a href="#">省份</a></li>
+			  <li value="1"><a href="#">市区</a></li>		
+			  <li value="3"><a href="#">温度</a></li>
+			  <li value="4"><a href="#">天气</a></li>
+			  <li value="5"><a href="#">风向</a></li>
+			  <li value="6"><a href="#">风速</a></li>
+			  <li value="7"><a href="#">更新日期</a></li>
+			  <li value="8"><a href="#">当前时间</a></li>
+			  <li value="9"><a href="#">全部</a></li>
+			  <li value="10"><a href="#">生成</a></li>
+			 </ul> 
+		   </li>
+		</ul>
+	  </div>
+	</nav>
+	</header>
+	<main>
+			<form class="box">
+				<input type="text"  style="display: none" placeholder="玄学跳转，不加一个文本框，他就没法跳转 删了这条就没法回车搜索">
+				<input type="search" class="text"  id="te" name="" oninput="my_Spinner()">
+				<input type="button" class="shousuo" id="sou">
+				<div class="shousuo"  id="tup"></div>
+			</form>
+			<div class="Lenovo">
+				
+			</div>
+	</main>
+	<footer class="foot" >
+		<div class="weather"></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p>天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text">此处为文本区域</textarea></div>
+		<div class="wea"><p id="divT">天气</p><span class="glyphicon glyphicon glyphicon-remove guanbi"></span><textarea class="text"></textarea></div>
+		
+		
+	</footer>
+</body>
+</html>
